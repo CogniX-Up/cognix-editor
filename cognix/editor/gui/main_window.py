@@ -118,9 +118,6 @@ class MainWindow(QMainWindow):
         # Create data type dialogue
         self.type_dialog = VarTypeDialogue(parent=self)
 
-        # unused; default flow theme etc. are defined by Config
-        # self.session_gui.design.load_from_config(abs_path_from_package_dir('gui/styling/design_config.json'))
-
         self.session_gui.design.set_flow_theme(name=self.config.flow_theme)
         self.session_gui.design.set_animations_enabled(self.config.animations)
 
@@ -211,8 +208,10 @@ The editor console can still be used for commands.
             self._dialog_label_signal.emit(label)
             
         def _load():
-            change_dial_label('Importing Cognix Library...')
-            self.import_nodes(path=abs_path_from_package_dir('main/packages/cognix_library/'))
+            
+            if self.config.load_cognix:
+                change_dial_label('Importing Cognix Library...')
+                self.import_nodes(path=abs_path_from_package_dir('main/packages/cognix_library/'))
             
             if self._requested_packages:
                 change_dial_label('Importing requested packages...')
@@ -433,11 +432,11 @@ CONTROLS
         self.api_menu = QMenu('APIs', self)
         self.ui.menuBar.addMenu(self.api_menu)
         
-        self.rest_api_action = QAction('REST', self)
+        self.rest_api_action = QAction('RESTful', self)
         self.api_menu.addAction(self.rest_api_action)
         self.rest_api_msg = QMessageBox(
                 None,
-                'Rest API',
+                'RESTful API',
                 'Nothing yet',
                 QMessageBox.Ok,
                 self,
@@ -447,9 +446,9 @@ CONTROLS
         def on_rest_api_action():
             rest = self.core_session.rest_api
             if rest.running:
-                self.rest_api_msg.setText(f'REST running @{rest.port}!')
+                self.rest_api_msg.setText(f'RESTful running @{rest.port}!')
             else:
-                self.rest_api_msg.setText(f'REST inactive!')
+                self.rest_api_msg.setText(f'RESTful inactive!')
             self.rest_api_msg.show()
         self.rest_api_action.triggered.connect(on_rest_api_action)
         

@@ -208,15 +208,24 @@ def parse_sys_args(just_defaults=False) -> Config:
             • Enables a (highly unstable and hacky) feature that allows temporary\\ 
             editing of the source code of nodes in the source code preview panel\\
             (useful for debugging)\\
-            • When enabled, Ryven might consume much more memory than usual
+            • When enabled, CogniX might consume much more memory than usual
             ''')
+
+    parser.add_argument(
+        '--load-cognix',
+        action='store_true',
+        dest='load_cognix',
+        help=f'''
+            This argument allows to disable the loading of the built-in CogniX library.
+        '''
+    )
 
     parser.add_argument(
         '--defer-code-loading',
         action='store_true',
         dest='defer_code_loading',
         help=f'''
-            • When using deferred code loading, Ryven will load the source code of\\
+            • When using deferred code loading, CogniX will load the source code of\\
             nodes only once the user wants to inspect it.\\
             • Deferred code loading decreases package loading time.\\
             ''')
@@ -226,7 +235,7 @@ def parse_sys_args(just_defaults=False) -> Config:
         action='store_true',
         dest='rest_api',
         help=f'''
-            When using rest api, a RESTful service will start that allows\\
+            When using rest api, an HTTP-based service will start that allows\\
             for remote interaction with the Editor.
             ''')
     # Project configuration

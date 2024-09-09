@@ -413,9 +413,22 @@ class StartupDialog(QDialog):
         defer_code_cb.toggled.connect(self.on_defer_toggled)
         fbox.addRow(defer_code_label, defer_code_cb)
         
+        # Load CogniX Libraries at start
+        load_cognix_label = QLabel('Cognixlib:')
+        load_cognix_cb = QCheckBox('Import Cognixlib at start')
+        load_cognix_cb.setToolTip(
+            f'''Choose whether the default cognix lib will be loaded
+            along with your project. This may be useful if you don't
+            want the overhead of the CogniX Node Library.
+            '''
+        )
+        load_cognix_cb.toggled.connect(self.on_cognix_toggled)
+        fbox.addRow(load_cognix_label, load_cognix_cb)
+
         # Rest API
         rest_api_widget = QWidget()
         rest_api_widget.setLayout(QHBoxLayout())
+        rest_api_widget.layout().setContentsMargins(0, 0, 0, 0)
         
         rest_api_label = QLabel('RESTful API:')
         rest_api_cb = QCheckBox('Enabled')
@@ -433,6 +446,7 @@ class StartupDialog(QDialog):
         rest_api_widget.layout().addWidget(rest_api_cb)
         
         # port
+
         self.rest_api_port = QLineEdit(str(self.conf.rest_api_port))
         self.rest_api_port.setValidator(QIntValidator())
         self.rest_api_port.editingFinished.connect(self.on_rest_port_edited)
@@ -493,6 +507,9 @@ class StartupDialog(QDialog):
 
         # Set defer code loading
         defer_code_cb.setChecked(self.conf.defer_code_loading)
+
+        # Set cognixlib loading
+        load_cognix_cb.setChecked(self.conf.load_cognix)
         
         # Set window title and icon
         self.setWindowTitle('CogniX')
@@ -637,6 +654,11 @@ class StartupDialog(QDialog):
         self.conf.defer_code_loading = check
     #
     
+    # Cognixlib loading
+    def on_cognix_toggled(self, check):
+        """Call-back method, whenever cognixlib loading is toggled"""
+        self.conf.load_cognix = check
+
     def on_rest_api_toggled(self, check):
         """Call-back method, whenever the rest api checkbox was toggled"""
         self.conf.rest_api = check

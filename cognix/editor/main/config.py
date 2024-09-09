@@ -36,6 +36,7 @@ class Config:
     window_title: str = 'CogniX'
     qt_api: str = 'pyside6'
     src_code_edits_enabled: bool = False
+    load_cognix: bool = True
     defer_code_loading: bool = True
     rest_api: bool = False
     rest_api_port: int = 7555
